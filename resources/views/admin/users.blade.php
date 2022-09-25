@@ -54,83 +54,109 @@
         @include('admin.sidebar')
         <!-- partial -->
         <div class="container-fluid page-body-wrapper">
-        <!-- partial:partials/_navbar.html -->
-        @include('admin.header')
-        <!-- partial -->
-        <div class="main-panel">
-            <div class="content-wrapper">
+            <!-- partial:partials/_navbar.html -->
+            @include('admin.header')
+            <!-- partial -->
+            <div class="main-panel">
+                <div class="content-wrapper">
 
-                {{-- @if (session()->has('message'))
+                    {{-- @if (session()->has('message'))
                 <div class="alert alert-success">
                     <button type="button" class="close" data-dismiss="alert" aria-hidden="true">x</button>
                     {{ session()->get('message') }}
                 </div>
                 @endif --}}
 
-                <h2 class="font_size">All Users</h2>
+                    <h2 class="font_size">All Users</h2>
 
 
-                <div style="padding-left: 44%; padding-bottom: 30px;">
-                    <form action="{{ url('searchusers') }}" method="get">
-                        @csrf
-                        <input type="text" style="color: black;" name="search"
-                            placeholder="Search for something...">
-                        <input type="submit" value="Search" class="btn btn-outline-primary" placeholder="">
-                    </form>
-                </div>
+                    <div style="padding-left: 44%; padding-bottom: 30px;">
+                        <form action="{{ url('searchusers') }}" method="get">
+                            @csrf
+                            <input type="text" style="color: black;" name="search"
+                                placeholder="Search for something...">
+                            <input type="submit" value="Search" class="btn btn-outline-primary" placeholder="">
+                        </form>
+                    </div>
 
-                <table class="center">
-                    <tr class="th_color">
-                        <th class="th_design">User Name</th>
-                        <th class="th_design">Email</th>
-                        <th class="th_design">Phone</th>
-                        <th class="th_design">Address</th>
-                        <th class="th_design">Customer ID</th>
-                        <th class="th_design">Send Email</th>
-                        <th class="th_design">User Role</th>
-                        <th class="th_design">Set Role</th>
-                    </tr>
-                    @forelse ($users as $users)
-                        <tr>
-                            <td>{{ $users->name }}</td>
-                            <td>{{ $users->email }}</td>
-                            <td>{{ $users->phone }}</td>
-                            <td>{{ $users->address }}</td>
-                            <td>{{ $users->id }}</td>
-                            <td>
-                                <a href="{{ url('send_email_', $users->id) }}" class="btn btn-info">Send Email</a>
-                            </td>
-                            <td>
-                                @if ($users->usertype == '1')
-                                    Admin
-                                @elseif($users->usertype == '2')
-                                    Moderator
+                    <table class="center">
+                        <tr class="th_color">
+                            <th class="th_design">User Name</th>
+                            <th class="th_design">Email</th>
+                            <th class="th_design">Phone</th>
+                            <th class="th_design">Address</th>
+                            <th class="th_design">Customer ID</th>
+                            <th class="th_design">Send Email</th>
+                            <th class="th_design">User Role</th>
+                            @if (Auth::user()->usertype == '1')
+                            <th class="th_design">Set Role</th>
+                            <th class="th_design">Delete User</th>
+                            @else
+                            @endif
+                        </tr>
+                        @forelse ($users as $users)
+                            <tr>
+                                <td>{{ $users->name }}</td>
+                                <td>{{ $users->email }}</td>
+                                <td>{{ $users->phone }}</td>
+                                <td>{{ $users->address }}</td>
+                                <td>{{ $users->id }}</td>
+                                <td>
+                                    <a href="{{ url('send_email_', $users->id) }}" class="btn btn-info">Send Email</a>
+                                </td>
+                                <td>
+                                    @if ($users->usertype == '1')
+                                        Admin
+                                    @elseif($users->usertype == '2')
+                                        Moderator
+                                    @else
+                                        User
+                                    @endif
+                                </td>
+                                @if (Auth::user()->usertype == '1')
+                                @if ($users->usertype == '0')
+                                <td>
+                                    <form action="{{ url('make_moderator', $users->id) }}" method="post">
+                                        @csrf
+                                        <input type="submit"
+                                            onclick="return confirm('Are you sure you want to make this person a Moderator?')"
+                                            class="btn btn-primary" value="Make Moderator">
+                                    </form>
+                                </td>
                                 @else
-                                    User
+                                <td>Can not assign.</td>
                                 @endif
-                            </td>
                             <td>
-                                <a href="{{ url('make_moderator', $users->id) }}" onclick="return confirm('Are you sure you want to make this person a Moderator?')" class="btn btn-primary">Make
-                                    Moderator </a>
+                                <form action="{{ url('delete_user', $users->id) }}" method="post">
+                                    @csrf
+                                    <input type="submit"
+                                        onclick="return confirm('Are you sure you want to delete this user?')"
+                                        class="btn btn-danger" value="Delete User">
+                                </form>
                             </td>
-                        </tr>
+                            </tr>
+                            @else
 
-                    @empty
-                        <tr>
-                            <td colspan="16">
-                                No Data Found
-                            </td>
-                        </tr>
-                    @endforelse
-                </table>
+
+
+                            @endif
+
+                        @empty
+                            <tr>
+                                <td colspan="16">
+                                    No Data Found
+                                </td>
+                            </tr>
+                        @endforelse
+                    </table>
+                </div>
             </div>
-        </div>
-        <!-- main-panel ends -->
+            <!-- main-panel ends -->
 
-        <!-- page-body-wrapper ends -->
-    </div>
-    <!-- container-scroller -->
-    @include('admin.js')
+            <!-- page-body-wrapper ends -->
+        </div>
+        <!-- container-scroller -->
+        @include('admin.js')
 </body>
 
 </html>

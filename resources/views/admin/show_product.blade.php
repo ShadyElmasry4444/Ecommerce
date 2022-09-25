@@ -69,7 +69,10 @@
                         <th class="th_design">Price</th>
                         <th class="th_design">Discount Price</th>
                         <th class="th_design">Product Image</th>
+                        @if(Auth::user()->usertype == '1')
                         <th class="th_design">Delete</th>
+                        @else
+                        @endif
                         <th class="th_design">Edit</th>
                     </tr>
                     @foreach ($product as $product)
@@ -83,12 +86,14 @@
                         <td>
                             <img class="img_size" src="/product/{{ $product->image }}" alt="">
                         </td>
+                        @if(Auth::user()->usertype == '1')
                         <form action="{{ url('delete_product', $product->id) }}" method="POST">
                         @csrf
                         <td>
                             <input type="submit" class="btn btn-danger" onclick="return confirm('Are you sure you want to delete this?')" value="Delete">
                         </td>
-
+                        @else
+                        @endif
                         <td>
                             <a class="btn btn-success" href="{{ url('update_product', $product->id) }}">Edit</a>
                         </td>

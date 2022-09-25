@@ -56,6 +56,8 @@ Route::post('/send_user_email_/{id}', [AdminController::class, 'send_user_email_
 Route::get('/search', [AdminController::class, 'searchdata']);
 Route::get('/searchusers', [AdminController::class, 'searchusers']);
 Route::get('/getuserinfo', [AdminController::class, 'getuserinfo']);
+Route::post('/make_moderator/{id}', [AdminController::class, 'make_moderator']);
+Route::post('/delete_user/{id}', [AdminController::class, 'delete_user']);
 
 
 

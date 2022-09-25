@@ -70,12 +70,20 @@
                     <tr>
                         <td>{{ $data->Category_Name }}</td>
 
-                        <td>
+                    @if(Auth::user()->usertype == '1')
+
+                    <td>
                     <form action="{{ url('delete_category', $data->id) }}" method="POST">
                     @csrf
                             <input type="submit" onclick="return confirm('Are you sure you want to delete this?')"  class="btn btn-danger" value="Delete">
                     </form>
                         </td>
+
+                    @else
+
+                        <td><h1>Can not remove</h1></td>
+
+                    @endif
                     </tr>
                     @endforeach
 

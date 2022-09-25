@@ -242,4 +242,19 @@ class AdminController extends Controller
         $users=User::where('name', 'LIKE', "%$searchText%")->orWhere('phone', 'LIKE', "%$searchText%")->orWhere('email', 'LIKE', "%$searchText%")->get();
         return view('admin.users', compact('users'));
     }
+
+    public function make_moderator($id)
+    {
+        $users=User::find($id);
+        $users->usertype='2';
+        $users->save();
+        return redirect()->back();
+    }
+
+    public function delete_user($id)
+    {
+        $users=User::find($id);
+        $users->delete();
+        return redirect()->back();
+    }
 }

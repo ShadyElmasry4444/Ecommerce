@@ -17,7 +17,7 @@ class HomeController extends Controller
     {
         $usertype = Auth::user()->usertype;
 
-        if($usertype == '1')
+        if($usertype == '1' || '2' )
         {
             $total_product=Product::all()->count();
             $total_order=Order::all()->count();
